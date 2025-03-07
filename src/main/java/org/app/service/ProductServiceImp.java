@@ -39,6 +39,8 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ArrayList<Product> getProductByName(String name) {
+
+        System.out.println("from mengleang ");
         return null;
     }
 
