@@ -2,9 +2,11 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.TableConfig;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Scanner;
 
 public class ProductServiceImp implements ProductService {
     ProductRepoImp productRepoImp = new ProductRepoImp();
@@ -32,6 +34,10 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product getProductById(int id) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the product id: ");
+        int productId = scanner.nextInt();
+
         return null;
     }
 
