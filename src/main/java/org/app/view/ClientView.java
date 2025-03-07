@@ -11,6 +11,8 @@ public class ClientView {
                 (product) -> {
                     System.out.println(product.getProduct_name());
                 }
+
+        System.out.println("what the fuck");
         );
     }
 
