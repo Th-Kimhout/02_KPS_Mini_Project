@@ -32,15 +32,11 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product getProductById(int id) {
-        System.out.println("from me heng");
-
         return null;
     }
 
     @Override
     public ArrayList<Product> getProductByName(String name) {
-
-        System.out.println("from mengleang ");
         return null;
     }
 
