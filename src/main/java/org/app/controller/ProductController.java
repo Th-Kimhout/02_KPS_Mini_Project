@@ -9,16 +9,16 @@ public class ProductController {
 
     ProductServiceImp productService = new ProductServiceImp();
 
-    public ArrayList<Product> getAllProducts() {
-        return productService.getAllProducts();
-    }
+public ArrayList<Product> getAllProducts(){
+return productService.getAllProducts();
+}
 
     public void addProduct(Product product) {
         productService.addProduct(product);
     }
 
-public void updateProduct(int id, Product product, String field){
-      productService.updateProduct( id, product, field);
+public boolean updateProduct(int id){
+    return productService.updateProduct(id);
 }
 
 public boolean deleteProduct(int id){

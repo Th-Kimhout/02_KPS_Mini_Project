@@ -9,7 +9,7 @@ public interface ProductService {
 
     void addProduct(Product product)    ;
 
-    void updateProduct(int id, Product product, String field);
+    boolean updateProduct(int id);
 
     boolean deleteProduct(int id);
 
