@@ -22,6 +22,7 @@ public class Product {
         this.product_name = product_name;
         this.product_unit_price = product_unit_price;
         this.product_quantity = product_quantity;
+        this.product_created_date = new Date(System.currentTimeMillis());
     }
 
     public int getId() {

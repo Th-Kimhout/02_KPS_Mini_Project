@@ -42,6 +42,6 @@ public class UserInput {
 
     public static void closeScanner() {
         sc.close();
-        System.out.println("Close Scanner Succ!");
+        System.out.println("Close Scanner Successfully!");
     }
 }
