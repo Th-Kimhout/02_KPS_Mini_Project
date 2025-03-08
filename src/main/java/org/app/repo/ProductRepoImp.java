@@ -33,8 +33,8 @@ public class ProductRepoImp implements ProductRepo {
 
     @Override
     public boolean addProduct(Product product) {
-        String insertSql = "insert into products(product_name, product_unit_price, product_quantity,imported_date) values(?,?,?,?)";
 
+        String insertSql = "INSERT INTO products(product_name, product_unit_price, product_quantity,imported_date) VALUES(?,?,?,?)";
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(insertSql)) {
 
@@ -42,7 +42,9 @@ public class ProductRepoImp implements ProductRepo {
             stmt.setDouble(2, product.getProduct_unit_price());
             stmt.setInt(3, product.getProduct_quantity());
             stmt.setDate(4, product.getProduct_created_date());
+
             return stmt.execute();
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return false;

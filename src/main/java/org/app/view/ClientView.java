@@ -4,15 +4,17 @@ import org.app.controller.ProductController;
 import org.app.utilies.*;
 
 import java.util.Scanner;
+
 import org.app.utilies.*;
 
 
 public class ClientView {
     public static Scanner scanner = new Scanner(System.in);
     static ProductController productController = new ProductController();
+
     public static void mainView() {
 
-        System.out.println(Color.BRIGHT_CYAN+ """
+        System.out.println(Color.BRIGHT_CYAN + """
                 
                   ____  _             _      __   __                                                   _     ____            _                \s
                  / ___|| |_ ___   ___| | __ |  \\/  | __ _ _ __   __ _  __ _  ___ _ __ ___   ___ _ __ | |_  / ___| _   _ ___| |_ ___ _ __ ___ \s
@@ -21,7 +23,7 @@ public class ClientView {
                  |____/ \\__\\___/ \\___|_|\\_\\ |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_| |_| |_|\\___|_| |_|\\__| |____/ \\__, |___/\\__\\___|_| |_| |_|
                                                                       |___/                                       |___/                      \s
                 
-                """+Color.RESET);
+                """ + Color.RESET);
 
         int firstRow = 0;
         int showRows = Limit_rows.getLimitRows();
@@ -30,44 +32,60 @@ public class ClientView {
             displayAllProducts(firstRow, showRows);
             displayMenuOptions();
 
-            String pages = UserInput.Input("Enter your choice: ", "^[a-zA-Z]+$", "Invalid choice");
-            switch (pages.toUpperCase()) {
-                case "N" -> {
+            String pages = UserInput.Input("Enter your choice: ", "^[a-zA-Z]+$", "Invalid choice").toUpperCase();
+            Menu exactMenu = null;
+
+            // loop for get value of Menu enum
+            for (Menu menu : Menu.values()) {
+
+                String menuName = menu.name(); // store enum value,
+                if (menuName.startsWith(pages)) { // compare if menuName contain the letter that we have been input
+                    exactMenu = menu;
+                    break;
+                }
+            }
+            if (exactMenu == null) {
+                throw new IllegalArgumentException("Menu not found");
+            }
+
+            switch (exactMenu) {
+                case NEXT_PAGE -> {
                     if (firstRow + showRows < productController.getAllProducts().size()) {
                         firstRow += showRows;
                     }
                 }
-                case "P" -> {
+                case PREVIOUS_PAGE -> {
                     if (firstRow - showRows >= 0) {
                         firstRow -= showRows;
                     }
                 }
-                case "F" -> firstRow = 0;
-                case "L" ->
+                case FIRST_PAGE -> firstRow = 0;
+                case LAST_PAGE ->
                         firstRow = productController.getAllProducts().size() - (productController.getAllProducts().size() % showRows == 0 ? showRows : productController.getAllProducts().size() % showRows);
-                case "G" -> {
+                case GOTO -> {
                     String pageNumber = UserInput.Input("Page Number : ", "^[1-" + (int) (Math.ceil((float) productController.getAllProducts().size() / showRows)) + "]$", "Invalid choice");
                     firstRow = (Integer.parseInt(pageNumber) - 1) * showRows;
                 }
-                case "W" -> productController.addProduct();
-                case "R" -> searchById();
-                case "U" -> updateProducts();
-                case "D" -> deleteProduct();
-                case "S" -> searchProduct();
-                case "SE" -> {
+                case WRITE -> productController.addProduct();
+                case READ -> searchById();
+                case UPDATE -> updateProducts();
+                case DELETE -> deleteProduct();
+                case SEARCH -> searchProduct();
+
+                case SET_ROW -> {
                     String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
                     showRows = Limit_rows.updateLimitRows(Integer.parseInt(limitRows));
                 }
-                case "SA" -> productController.commitTransaction();
 
-                case "UN" -> {
-                    productController.displayUnsavedProducts();
-                }
-                case "BA" -> Backup.doBackup();
+                case SAVE -> productController.commitTransaction();
 
-                case "RE" -> Backup.doRestore();
+                case UN_SAVE -> productController.displayUnsavedProducts();
 
-                case "E" -> {
+                case BACKUP -> Backup.doBackup();
+
+                case RESTORE -> Backup.doRestore();
+
+                case EXIT -> {
                     System.out.println("Thank you for using this app");
                     System.exit(0);
                 }
@@ -100,11 +118,11 @@ public class ClientView {
     public static void searchProduct() {
         System.out.print(Color.BRIGHT_YELLOW + "Enter Product Name to search : " + Color.RESET);
         String name = scanner.nextLine().trim();
-        if(name.isEmpty()){
+        if (name.isEmpty()) {
             System.out.println(Color.BRIGHT_RED + "[!] Product Name cannot be empty" + Color.RESET);
             searchProduct();
         }
-        try{
+        try {
             productController.getProductByName(name);
             System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
             scanner.nextLine();
@@ -114,6 +132,7 @@ public class ClientView {
             searchProduct();
         }
     }
+
     public static void displayAllProducts(int firstRow, int showRows) {
         TableConfig.printTable(productController.getAllProducts(), firstRow, showRows);
     }
@@ -121,7 +140,7 @@ public class ClientView {
     public static void searchById() {
         String idStr = UserInput.Input("Enter Product ID to search: ", "^[0-9]+$", "[!] Product ID must be Number");
         int id = Integer.parseInt(idStr);
-        try{
+        try {
             productController.getProductById(id);
             System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
             scanner.nextLine();
