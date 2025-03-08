@@ -11,12 +11,15 @@ public class ClientView {
                 (product) -> {
                     System.out.println(product.getProduct_name());
                 }
+
+
         );
   }
   public static void Display(){
       GetProduct.GetProductByName();
       GetProduct.GetProductById();
   }
+
 
 
 
