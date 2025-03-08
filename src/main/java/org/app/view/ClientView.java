@@ -1,6 +1,7 @@
 package org.app.view;
 
 import org.app.controller.ProductController;
+import org.app.utilies.UserInput;
 import org.app.utilies.Utility;
 
 public class ClientView {
@@ -19,7 +20,7 @@ public class ClientView {
         String productID;
 
         do {
-            productID = Utility.patternCheck("^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!", "Enter Product ID to delete: ");
+            productID = UserInput.Input("Enter Product ID to delete: ","^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!");
             boolean successDeleted = productController.deleteProduct(Integer.parseInt(productID));
 
             if (successDeleted){

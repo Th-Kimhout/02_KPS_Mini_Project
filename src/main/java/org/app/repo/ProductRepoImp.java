@@ -64,8 +64,8 @@ public class ProductRepoImp implements ProductRepo {
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
-            stmt.setInt(1, id); // Set the ID parameter
-            int rowsAffected = stmt.executeUpdate(); // Use executeUpdate()
+            stmt.setInt(1, id);
+            int rowsAffected = stmt.executeUpdate();
 
             return rowsAffected > 0; // Return true if a row was deleted
         } catch (Exception e) {
