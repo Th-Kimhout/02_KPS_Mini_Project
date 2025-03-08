@@ -2,9 +2,15 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.Color;
+import org.app.utilies.DBConfig;
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
 
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,27 +29,44 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void addProduct() {
-        int lastProductId = productRepoImp.getAllProducts().stream().mapToInt(Product::getId).max().orElse(-1);
 
-        System.out.println("Product ID: " + (++lastProductId));
 
-        String productName = UserInput.Input("Enter product name :", "^[a-zA-Z ]+$", "Invalid product name");
+        int productId = getNextProductId();
+        System.out.println("Product ID: " + productId );
 
-        String price = UserInput.Input("Enter price :", "^\\d+(\\.\\d{1,2})?$", "Invalid price");
+        String productName = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter product name :" + Color.RESET, "^[a-zA-Z ]+$", Color.BRIGHT_RED + "[!] Invalid product name" + Color.RESET);
 
-        String quantity = UserInput.Input("Enter quantity :", "^\\d+$", "Invalid quantity");
+        String price = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter price :" + Color.RESET, "^\\d+(\\.\\d{1,2})?$", Color.BRIGHT_RED + "[!] Invalid price" + Color.RESET);
 
-        System.out.println("Press Enter to continue...");
+        String quantity = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter quantity :" + Color.RESET, "^\\d+$", Color.BRIGHT_RED + "[!] Invalid quantity " + Color.RESET);
+
+        System.out.println("\n");
+        System.out.println(Color.BRIGHT_YELLOW +  "Enter to continue..." + Color.RESET);
 
         new Scanner(System.in).nextLine();
+
+        System.out.println(Color.BRIGHT_GREEN + "Product created successfully" + Color.RESET);
 
         double finalPrice = Double.parseDouble(price);
 
         int quantityInt = Integer.parseInt(quantity);
 
-        Product product = new Product(lastProductId, productName, finalPrice, quantityInt, java.sql.Date.valueOf(LocalDate.now()));
-        productInsertTransaction.add(product);
+        Product product = new Product( productId ,  productName, finalPrice, quantityInt ,new Date(System.currentTimeMillis()));
+    }
+    private int getNextProductId() {
+        String selectId = "SELECT MAX(id) FROM products";
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(selectId);
+             ResultSet rs = stmt.executeQuery()) {
 
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+            return 1; // If no products exist yet
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 1; // Default to 1 on error
+        }
     }
 
     @Override

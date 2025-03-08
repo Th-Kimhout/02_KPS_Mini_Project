@@ -9,7 +9,7 @@ public class UserInput {
 
     public static String Input(String request, String regex, String message) {
         System.out.print(request);
-        String value = sc.nextLine();
+        String value = sc.nextLine().trim();
 
         if (count >= 3 && request.equals("Enter Backup Id To Restore : ")) {
             System.out.println("The Backup version that you Input, Doesn't exist");
