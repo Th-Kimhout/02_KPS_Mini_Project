@@ -73,37 +73,34 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void deleteProduct(int id) {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            Product foundProduct = getProductById(id);
-            String yN;
+        Scanner scanner = new Scanner(System.in);
+        Product foundProduct = getProductById(id);
+        String yN;
 
-            TableConfig.getTable(List.of(foundProduct));
-
-            loop:
-            do {
-                System.out.print("Are you sure to delete product id: " + id + "? (Y/N) : ");
-                yN = scanner.nextLine();
-                switch (yN.toUpperCase()) {
-                    case "Y":
-                        System.out.println();
-                        productRepoImp.deleteProduct(id);
-                        System.out.println("Product deleted successfully");
-                        System.out.println("Enter to continue...");
-                        scanner.nextLine();
-                        break loop;
-                    case "N":
-                        System.out.println("Exit");
-                        ;
-                        break loop;
-                    default:
-                        System.out.println("Please input Y or N");
-                }
-            } while (true);
-
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Product not found!");
+        if (foundProduct == null){
+            throw new NullPointerException("Please input Product ID again.");
         }
+
+        loop:
+        do {
+            System.out.print(Color.BRIGHT_YELLOW + "Are you sure to delete product id: " + Color.RESET + Color.BRIGHT_RED + id + Color.RESET + " ? (Y/N) : ");
+            yN = scanner.nextLine();
+            switch (yN.toUpperCase()) {
+                case "Y":
+                    productRepoImp.deleteProduct(id);
+                    System.out.println(Color.BRIGHT_GREEN + "\nProduct deleted successfully" + Color.RESET);
+                    System.out.println(Color.BRIGHT_YELLOW + "Enter to continue..." + Color.RESET);
+                    scanner.nextLine();
+                    break loop;
+                case "N":
+                    System.out.println(Color.BRIGHT_GREEN + "\nYou're canceled deleted product." + Color.RESET);
+                    System.out.println(Color.BRIGHT_YELLOW + "Enter to continue..." + Color.RESET);
+                    scanner.nextLine();
+                    break loop;
+                default:
+                    System.out.println(Color.BRIGHT_RED + "Please input Y or N" + Color.RESET);
+            }
+        } while (true);
     }
 
     @Override
