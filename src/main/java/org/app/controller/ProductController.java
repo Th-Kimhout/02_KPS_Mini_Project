@@ -17,8 +17,8 @@ public class ProductController {
         productService.addProduct();
     }
 
-    public boolean updateProduct(int id) {
-        return productService.updateProduct(id);
+    public void updateProduct(int id) {
+        productService.updateProduct(id);
     }
 
     public void deleteProduct(int id) {

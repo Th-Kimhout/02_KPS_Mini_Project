@@ -1,7 +1,6 @@
 package org.app.utilies;
 
 import java.util.Scanner;
-import java.util.regex.Pattern;
 
 public class UserInput {
     public static Scanner sc = new Scanner(System.in);
@@ -12,10 +11,10 @@ public class UserInput {
         String value = sc.nextLine();
 
         if (count >= 3 && request.equals("Enter Backup Id To Restore : ")) {
-            System.out.println("The Backup version that you Input, Doesn't exist");
+            System.out.println(Color.BRIGHT_RED + "The Backup version that you Input, Doesn't exist" + Color.RESET);
             count = 0;
-            while (true) {
-                System.out.println("Do You Want To Continues (y/n)? ");
+            while (true){
+                System.out.println(Color.BRIGHT_YELLOW + "Do You Want To Continues (y/n)? " + Color.RESET);
                 value = sc.nextLine();
 
                 if (value.equals("y") || value.equals("Y")) {
@@ -29,15 +28,18 @@ public class UserInput {
         }
 
         if (value == null || value.trim().isEmpty()) {
-            System.out.println("The field should not be empty");
+            System.out.println(Color.BRIGHT_RED + "The field should not be empty" + Color.RESET);
             count++;
             return Input(request, regex, message);
         } else if (!value.matches(regex)) {
-            System.out.println(message);
+            System.out.println(Color.BRIGHT_RED + message + Color.RESET);
             count++;
             return Input(request, regex, message);
         } else
             return value.trim();
     }
 
+    public static void closeScanner() {
+        sc.close();
+    }
 }

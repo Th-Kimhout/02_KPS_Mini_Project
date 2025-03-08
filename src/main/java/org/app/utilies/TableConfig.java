@@ -70,9 +70,9 @@ public class TableConfig {
         System.out.println(table.render());
     }
 
-    public static String displayUpdateMenu() {
-        System.out.print("1. Name \t 2. Unit Price \t 3. Qty \t 4.All Field \t 5.Exit \n");
-        String getMenuValue = UserInput.Input("Choose an Option to Update : ", "^[\\d]+$", "Allow Input only Text");
+    public static String displayUpdateMenu(){
+        System.out.print(Color.BRIGHT_CYAN + "1.Name \t 2.Unit Price \t 3.Qty \t 4.All Field \t 5.Exit \n" + Color.RESET);
+        String getMenuValue = UserInput.Input("Choose an Option to Update : ","^[\\d]+$","Allow Input only Number");
         return getMenuValue;
     }
 }
