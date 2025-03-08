@@ -6,27 +6,24 @@ import org.nocrala.tools.texttablefmt.CellStyle;
 import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.app.controller.ProductController;
 
 
 public class TableConfig {
 
     public static void getTable(List<Product> product) {
         Table table = new Table(5, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL);
-        table.addCell("ID", new CellStyle(CellStyle.HorizontalAlign.CENTER));
-        table.addCell("Product Name", new CellStyle(CellStyle.HorizontalAlign.CENTER));
-        table.addCell("Unit Price", new CellStyle(CellStyle.HorizontalAlign.CENTER));
-        table.addCell("Quality", new CellStyle(CellStyle.HorizontalAlign.CENTER));
-        table.addCell("Import Date", new CellStyle(CellStyle.HorizontalAlign.CENTER));
-        for (int i = 0; i < product.size(); i++) {
-            table.addCell(String.valueOf(product.get(i).getId()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
-            table.addCell(product.get(i).getProduct_name(), new CellStyle(CellStyle.HorizontalAlign.CENTER));
-            table.addCell(String.valueOf(product.get(i).getProduct_unit_price()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
-            table.addCell(String.valueOf(product.get(i).getProduct_quantity()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
-            table.addCell(String.valueOf(product.get(i).getProduct_created_date()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
+        String[] columnsHeader = {"ID", "Product Name", "Unit Price", "Quality", "Import Date"};
+        for (String col : columnsHeader) {
+            table.addCell(Color.BRIGHT_PURPLE + col + Color.BRIGHT_PURPLE, new CellStyle(CellStyle.HorizontalAlign.CENTER));
+        }
+        for (Product value : product) {
+            table.addCell(Color.BRIGHT_BLUE + value.getId() + Color.RESET, new CellStyle(CellStyle.HorizontalAlign.CENTER));
+            table.addCell(value.getProduct_name(), new CellStyle(CellStyle.HorizontalAlign.CENTER));
+            table.addCell(String.valueOf(value.getProduct_unit_price()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
+            table.addCell(String.valueOf(value.getProduct_quantity()), new CellStyle(CellStyle.HorizontalAlign.CENTER));
+            table.addCell(Color.BRIGHT_BLUE + value.getProduct_created_date() + Color.RESET, new CellStyle(CellStyle.HorizontalAlign.CENTER));
         }
 
         for (int j = 0; j < 5; j++) {
@@ -65,14 +62,14 @@ public class TableConfig {
         }
 
         table.addCell("Page : " + Color.BRIGHT_YELLOW + currentPage + Color.RESET + " of " + Color.BRIGHT_RED + totalPage + Color.RESET, new CellStyle(CellStyle.HorizontalAlign.CENTER), 2);
-        table.addCell("Total Record : " + Color.BRIGHT_GREEN + totalPage + Color.RESET, new CellStyle(CellStyle.HorizontalAlign.CENTER), 3);
+        table.addCell("Total Record : " + Color.BRIGHT_GREEN + totalRecords + Color.RESET, new CellStyle(CellStyle.HorizontalAlign.CENTER), 3);
 
         System.out.println(table.render());
     }
 
-    public static String displayUpdateMenu(){
+    public static String displayUpdateMenu() {
         System.out.print(Color.BRIGHT_CYAN + "1.Name \t 2.Unit Price \t 3.Qty \t 4.All Field \t 5.Exit \n" + Color.RESET);
-        String getMenuValue = UserInput.Input("Choose an Option to Update : ","^[\\d]+$","Allow Input only Number");
+        String getMenuValue = UserInput.Input("Choose an Option to Update : ", "^[\\d]+$", "Allow Input only Number");
         return getMenuValue;
     }
 }

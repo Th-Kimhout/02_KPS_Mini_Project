@@ -32,60 +32,45 @@ public class ClientView {
             displayAllProducts(firstRow, showRows);
             displayMenuOptions();
 
-            String pages = UserInput.Input("Enter your choice: ", "^[a-zA-Z]+$", "Invalid choice").toUpperCase();
-            Menu exactMenu = null;
-
-            // loop for get value of Menu enum
-            for (Menu menu : Menu.values()) {
-
-                String menuName = menu.name(); // store enum value,
-                if (menuName.startsWith(pages)) { // compare if menuName contain the letter that we have been input
-                    exactMenu = menu;
-                    break;
-                }
-            }
-            if (exactMenu == null) {
-                throw new IllegalArgumentException("Menu not found");
-            }
-
-            switch (exactMenu) {
-                case NEXT_PAGE -> {
+            String pages = UserInput.Input("Enter your choice: ", "^[a-zA-Z]+$", "Invalid choice");
+            switch (pages.toUpperCase()) {
+                case "N" -> {
                     if (firstRow + showRows < productController.getAllProducts().size()) {
                         firstRow += showRows;
                     }
                 }
-                case PREVIOUS_PAGE -> {
+                case "P" -> {
                     if (firstRow - showRows >= 0) {
                         firstRow -= showRows;
                     }
                 }
-                case FIRST_PAGE -> firstRow = 0;
-                case LAST_PAGE ->
+                case "F" -> firstRow = 0;
+                case "L" ->
                         firstRow = productController.getAllProducts().size() - (productController.getAllProducts().size() % showRows == 0 ? showRows : productController.getAllProducts().size() % showRows);
-                case GOTO -> {
-                    String pageNumber = UserInput.Input("Page Number : ", "^[1-" + (int) (Math.ceil((float) productController.getAllProducts().size() / showRows)) + "]$", "Invalid choice");
+                case "G" -> {
+                    String pageNumber = UserInput.Input("Page Number : ", "^[1-" + (int) (Math.ceil((float) productController.getAllProducts().size() / showRows)) + "]$", "[!] Invalid choice!");
                     firstRow = (Integer.parseInt(pageNumber) - 1) * showRows;
                 }
-                case WRITE -> productController.addProduct();
-                case READ -> searchById();
-                case UPDATE -> updateProducts();
-                case DELETE -> deleteProduct();
-                case SEARCH -> searchProduct();
+                case "W" -> productController.addProduct();
+                case "R" -> searchById();
+                case "U" -> updateProducts();
+                case "D" -> deleteProduct();
+                case "S" -> searchProduct();
 
-                case SET_ROW -> {
-                    String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
+                case "SE" -> {
+                    String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "[!] Invalid choice!");
                     showRows = Limit_rows.updateLimitRows(Integer.parseInt(limitRows));
                 }
 
-                case SAVE -> productController.commitTransaction();
+                case "SA" -> productController.commitTransaction();
 
-                case UN_SAVE -> productController.displayUnsavedProducts();
+                case "UN" -> productController.displayUnsavedProducts();
 
-                case BACKUP -> Backup.doBackup();
+                case "BA" -> Backup.doBackup();
 
-                case RESTORE -> Backup.doRestore();
+                case "RE" -> Backup.doRestore();
 
-                case EXIT -> {
+                case "E" -> {
                     System.out.println("Thank you for using this app");
                     System.exit(0);
                 }
@@ -94,11 +79,11 @@ public class ClientView {
     }
 
     public static void displayMenuOptions() {
-        String[] list = {"N.", "P.", "F.", "G."};
-        String[] options = {"Next Page", "Previous Page", "First Page", "Goto"};
+        String[] list = {"N.", "P.", "F.", "L.", "G."};
+        String[] options = {"Next Page", "Previous Page", "First Page", "Last Page", "Goto"};
         System.out.println("                            ___________ Menu ___________");
-        for (int i = 0; i < 4; i++) {
-            System.out.print("         " + Color.BRIGHT_GREEN + list[i] + Color.RESET + " " + options[i]);
+        for (int i = 0; i < 5; i++) {
+            System.out.print("     " + Color.BRIGHT_GREEN + list[i] + Color.RESET + " " + options[i]);
         }
         System.out.println("\n");
         String[] menuList = {"W)", "R)", "U)", "D)", "S)", "Se)", "Sa)", "Un)", "Ba)", "Re)", "E)"};
@@ -110,9 +95,6 @@ public class ClientView {
             System.out.print(Color.BRIGHT_GREEN + menuList[i] + Color.RESET + " " + menuOption[i] + "     ");
         }
         System.out.println();
-        System.out.println("W) Write    R) Read (id)    U) Update       D) Delete       S) Search (name)   Se) Set rows");
-        System.out.println("Sa) Save    Un) Unsaved     Ba) Backup      Re) Restore     E) Exit");
-        System.out.println("                            __________________________");
     }
 
     public static void searchProduct() {
@@ -138,7 +120,7 @@ public class ClientView {
     }
 
     public static void searchById() {
-        String idStr = UserInput.Input("Enter Product ID to search: ", "^[0-9]+$", "[!] Product ID must be Number");
+        String idStr = UserInput.Input("Enter Product ID to search: ", "^[0-9]+$", "[!] Product ID must be Number!");
         int id = Integer.parseInt(idStr);
         try {
             productController.getProductById(id);
@@ -152,7 +134,7 @@ public class ClientView {
 
     public static void deleteProduct() {
         String productID;
-        productID = UserInput.Input("Please Input Product ID to delete record: ", "^[0-9]+$", "Product ID must be number.");
+        productID = UserInput.Input("Please Input Product ID to delete record: ", "^[0-9]+$", "[!] Product ID must be number!");
         try {
             productController.deleteProduct(Integer.parseInt(productID));
         } catch (Exception e) {
@@ -162,7 +144,7 @@ public class ClientView {
     }
 
     public static void updateProducts() {
-        String productById = UserInput.Input("Input Id to Update : ", "^[\\d]+$", "Allow Input only Number");
+        String productById = UserInput.Input("Input Id to Update : ", "^[\\d]+$", "[!] Allow Input only Number!");
         try {
             productController.updateProduct(Integer.parseInt(productById));
         } catch (Exception e) {

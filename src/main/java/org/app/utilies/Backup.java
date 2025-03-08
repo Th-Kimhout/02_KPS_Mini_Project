@@ -103,7 +103,7 @@ public class Backup {
         System.out.println(displayBackupFile.render());
         String choice;
         while (true) {
-            choice = UserInput.Input("Select Version ID to Restore : ", "\\d+", "Invalid Version ID Input!");
+            choice = UserInput.Input("Enter Backup Id To Restore : ", "\\d+", "Invalid Version ID Input!");
             int versionId = Integer.parseInt(choice);
             if (versionId < 0 || versionId > backupFiles.length) {
                 System.out.println(Color.BRIGHT_RED + "Selected Version out of range!" + Color.RESET);

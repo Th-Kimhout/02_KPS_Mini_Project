@@ -34,14 +34,14 @@ public class ProductRepoImp implements ProductRepo {
     @Override
     public boolean addProduct(Product product) {
 
-        String insertSql = "INSERT INTO products(product_name, product_unit_price, product_quantity,imported_date) VALUES(?,?,?,?)";
+        String insertSql = "INSERT INTO products(id,product_name, product_unit_price, product_quantity,imported_date) VALUES(?,?,?,?,?)";
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(insertSql)) {
-
-            stmt.setString(1, product.getProduct_name());
-            stmt.setDouble(2, product.getProduct_unit_price());
-            stmt.setInt(3, product.getProduct_quantity());
-            stmt.setDate(4, product.getProduct_created_date());
+            stmt.setInt(1, product.getId());
+            stmt.setString(2, product.getProduct_name());
+            stmt.setDouble(3, product.getProduct_unit_price());
+            stmt.setInt(4, product.getProduct_quantity());
+            stmt.setDate(5, product.getProduct_created_date());
 
             return stmt.execute();
 
@@ -124,6 +124,22 @@ public class ProductRepoImp implements ProductRepo {
             stmt.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+    public int getNextProductId() {
+        String selectId = "SELECT MAX(id) FROM products";
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(selectId);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1) + 1;
+            }
+            return 1;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 1;
         }
     }
 }

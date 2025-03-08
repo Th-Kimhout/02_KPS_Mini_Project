@@ -3,15 +3,13 @@ package org.app.service;
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
 import org.app.utilies.Color;
-import org.app.utilies.DBConfig;
+
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
 
-import java.sql.Connection;
+
 import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.time.LocalDate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -21,6 +19,7 @@ public class ProductServiceImp implements ProductService {
     ProductRepoImp productRepoImp = new ProductRepoImp();
     ArrayList<Product> productInsertTransaction = new ArrayList<>();
     ArrayList<Product> productUpdateTransaction = new ArrayList<>();
+    int productId = productRepoImp.getNextProductId();
 
     @Override
     public ArrayList<Product> getAllProducts() {
@@ -29,68 +28,49 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void addProduct() {
+        int incrementID = productId++;
+        System.out.println("Product ID: " + incrementID);
 
+        String productName = UserInput.Input(Color.BRIGHT_YELLOW + "Enter product name : " + Color.RESET, "^[a-zA-Z\\d ]+$", Color.BRIGHT_RED + "[!] Invalid product name!" + Color.RESET);
 
-        int productId = getNextProductId();
-        System.out.println("Product ID: " + productId );
+        String price = UserInput.Input(Color.BRIGHT_YELLOW + "Enter price : " + Color.RESET, "^\\d{1,7}(\\.\\d{1,2})?$", Color.BRIGHT_RED + "[!] Invalid price! Price can only be number and less than 6 numbers!" + Color.RESET);
 
-        String productName = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter product name :" + Color.RESET, "^[a-zA-Z ]+$", Color.BRIGHT_RED + "[!] Invalid product name" + Color.RESET);
+        String quantity = UserInput.Input(Color.BRIGHT_YELLOW + "Enter quantity : " + Color.RESET, "^\\d{1,8}$", Color.BRIGHT_RED + "[!] Invalid quantity! Quantity can only be number and less than 8 numbers!" + Color.RESET);
 
-        String price = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter price :" + Color.RESET, "^\\d+(\\.\\d{1,2})?$", Color.BRIGHT_RED + "[!] Invalid price" + Color.RESET);
-
-        String quantity = UserInput.Input(Color.BRIGHT_YELLOW + "-> Enter quantity :" + Color.RESET, "^\\d+$", Color.BRIGHT_RED + "[!] Invalid quantity " + Color.RESET);
-
-        System.out.println("\n");
-        System.out.println(Color.BRIGHT_YELLOW +  "Enter to continue..." + Color.RESET);
+        System.out.println(Color.BRIGHT_GREEN + "Product created successfully" + Color.RESET);
+        System.out.println(Color.BRIGHT_YELLOW + "Enter to continue..." + Color.RESET);
 
         new Scanner(System.in).nextLine();
 
-        System.out.println(Color.BRIGHT_GREEN + "Product created successfully" + Color.RESET);
 
         double finalPrice = Double.parseDouble(price);
 
         int quantityInt = Integer.parseInt(quantity);
 
-        Product product = new Product( productId ,  productName, finalPrice, quantityInt ,new Date(System.currentTimeMillis()));
-    }
-    private int getNextProductId() {
-        String selectId = "SELECT MAX(id) FROM products";
-        try (Connection conn = DBConfig.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(selectId);
-             ResultSet rs = stmt.executeQuery()) {
-
-            if (rs.next()) {
-                return rs.getInt(1) + 1;
-            }
-            return 1; // If no products exist yet
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return 1; // Default to 1 on error
-        }
+        productInsertTransaction.add(new Product(incrementID, productName, finalPrice, quantityInt, new Date(System.currentTimeMillis())));
     }
 
     @Override
     public void updateProduct(int id) {
-            Product tempProduct = getProductById(id);
-            int getMenuValue;
-            do {
-                TableConfig.getTable(List.of(tempProduct));
-                getMenuValue = Integer.parseInt(TableConfig.displayUpdateMenu());
-                switch (getMenuValue) {
-                    case 1 ->
-                            tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "Invalid Input"));
-                    case 2 ->
-                            tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number Or Only 2 De ")));
-                    case 3 ->
-                            tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
-                    case 4 -> {
-                        tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "Invalid Input"));
-                        tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number And X.XX")));
-                        tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
-                    }
+        Product tempProduct = getProductById(id);
+        int getMenuValue;
+        do {
+            getMenuValue = Integer.parseInt(TableConfig.displayUpdateMenu());
+            switch (getMenuValue) {
+                case 1 ->
+                        tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "[!] Invalid Input!"));
+                case 2 ->
+                        tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d{1,7}(\\.\\d{1,2})?$", "[!] Invalid price! Price can only be number and less than 6 numbers!")));
+                case 3 ->
+                        tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d{1,8}$", "[!] Invalid quantity! Quantity can only be number and less than 8 numbers!")));
+                case 4 -> {
+                    tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "Invalid Input"));
+                    tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d{1,7}(\\.\\d{1,2})?$", "[!] Invalid price! Price can only be number and less than 6 numbers!(x.xx)")));
+                    tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d{1,8}$", "[!] Invalid quantity! Quantity can only be number and less than 8 numbers!")));
                 }
-                productUpdateTransaction.add(tempProduct);
-            } while (getMenuValue != 5);
+            }
+        } while (getMenuValue != 5);
+        productUpdateTransaction.add(tempProduct);
     }
 
     @Override
@@ -99,8 +79,8 @@ public class ProductServiceImp implements ProductService {
         Product foundProduct = getProductById(id);
         String yN;
 
-        if (foundProduct == null){
-            throw new NullPointerException("Please input Product ID again.");
+        if (foundProduct == null) {
+            throw new NullPointerException("[!] Please input Product ID again!");
         }
 
         loop:
@@ -129,7 +109,7 @@ public class ProductServiceImp implements ProductService {
     public Product getProductById(int id) {
         Product foundProduct = productRepoImp.getProductById(id);
         if (foundProduct == null) {
-           throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this ID" + Color.RESET);
+            throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this ID!" + Color.RESET);
         } else {
             TableConfig.getTable(List.of(foundProduct));
         }
@@ -140,7 +120,7 @@ public class ProductServiceImp implements ProductService {
     public void getProductByName(String name) {
         ArrayList<Product> productList = productRepoImp.getProductByName(name);
         if (productList.isEmpty()) {
-            throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this name" + Color.RESET);
+            throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this name!" + Color.RESET);
 
         } else {
             TableConfig.getTable(productList);
@@ -149,25 +129,38 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void commitTransaction() {
-
+        System.out.println("""
+                Choose:
+                si) Save Insert
+                su) Save Update
+                """);
         String choice = UserInput.Input("Choice : ", "^(si|su|b)$", "Invalid Input. ui, uu or b only!");
         switch (choice) {
             case "si" -> {
-                System.out.println(productInsertTransaction);
+                if (productInsertTransaction.isEmpty()) {
+                    System.out.println(Color.BRIGHT_RED + "Nothing to insert!" + Color.RESET);
+                    return;
+                }
                 for (Product product : productInsertTransaction) {
                     productRepoImp.addProduct(product);
+                    System.out.println(Color.BRIGHT_GREEN + "Add Product ID : " + product.getId() + " Successfully!" + Color.RESET);
                 }
-
+                productInsertTransaction = new ArrayList<>();
             }
             case "su" -> {
+                if (productUpdateTransaction.isEmpty()) {
+                    System.out.println(Color.BRIGHT_RED + "Nothing to update!" + Color.RESET);
+                    return;
+                }
                 for (Product product : productUpdateTransaction) {
                     productRepoImp.updateProduct(product.getId(), product);
+                    System.out.println(Color.BRIGHT_GREEN + "Update Product ID : " + product.getId() + " Successfully!" + Color.RESET);
                 }
-            }
-            case "b" -> {
-                return;
+                productUpdateTransaction = new ArrayList<>();
             }
         }
+        System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
+        new Scanner(System.in).nextLine();
     }
 
     public void displayUnsavedProducts() {
@@ -177,11 +170,12 @@ public class ProductServiceImp implements ProductService {
                 uu) Unsaved Update
                 b)  Exit
                 """);
-        String choice = UserInput.Input("Choice : ", "^(ui|uu)$", "Invalid Input. ui, uu or b only!");
+        String choice = UserInput.Input("Choice : ", "^(ui|uu|b)$", "Invalid Input. ui, uu or b only!");
         switch (choice) {
             case "ui" -> TableConfig.getTable(productInsertTransaction);
 
             case "uu" -> TableConfig.getTable(productUpdateTransaction);
+
 
         }
         System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
