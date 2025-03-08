@@ -68,7 +68,7 @@ public class ProductRepoImp implements ProductRepo {
     @Override
     public Product getProductById(int id) {
         Product product = null;
-        String selectSql = "select * from products where id = ?";
+        String selectSql = "SELECT * FROM products WHERE id = ?";
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(selectSql)) {
             stmt.setInt(1, id);
@@ -90,7 +90,7 @@ public class ProductRepoImp implements ProductRepo {
     @Override
     public ArrayList<Product> getProductByName(String name) {
         ArrayList<Product> productList = new ArrayList<>();
-        String selectSql = "select * from products where product_name like ?";
+        String selectSql = "SELECT * FROM products WHERE product_name LIKE ?";
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(selectSql)) {
             stmt.setString(1, "%" + name + "%");

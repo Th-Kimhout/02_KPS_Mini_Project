@@ -5,30 +5,39 @@ import org.app.model.Product;
 import org.app.utilies.UserInput;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Scanner;
+
 
 public class InsertProducts {
 
    static  ProductController productController = new ProductController();
-    public static void addProduct() {
-        Date date = new Date();
-        Scanner sc = new Scanner(System.in);
 
-        int productId = 30;
-        UserInput.Input("Enter product name" , "^[a-zA-Z]+$" , "Invalid product name" );
+    static Scanner sc = new Scanner(System.in);
+    public static void addProduct(int id ) {
 
-        String productName = sc.nextLine();
 
-        UserInput.Input("Enter price" , "^\\d+(\\.\\d{1,2})?$\n" , "Invalid price" );
-        double price = sc.nextDouble();
-        UserInput.Input("Enter quantity" , "^\\d+$" , "Invalid quantity" );
-        int quantity = sc.nextInt();
+        do{
+            String productName = UserInput.Input("Enter product name :", "^[a-zA-Z ]+$", "Invalid product name");
 
-        Product product = new Product(productId , productName , price , quantity , java.sql.Date.valueOf(LocalDate.now()) );
+            String price =  UserInput.Input("Enter price :", "^\\d+(\\.\\d{1,2})?$", "Invalid price");
 
-       productController.addProduct(product);
+            String quantity = UserInput.Input("Enter quantity :", "^\\d+$", "Invalid quantity");
+
+
+            System.out.println("Press Enter to continue...");
+
+            sc.nextLine();
+
+            double finalPrice = Double.parseDouble(price);
+            int quantityInt = Integer.parseInt(quantity);
+
+
+            Product product = new Product( id,productName , finalPrice , quantityInt , java.sql.Date.valueOf(LocalDate.now()) );
+
+            productController.addProduct(product);
+            break;
+
+        }while (true);
 
     }
 }

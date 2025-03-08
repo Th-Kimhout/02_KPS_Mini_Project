@@ -17,13 +17,12 @@ public class Product {
         this.product_created_date = product_created_date;
     }
 
-    public Product() {}
-
 
     public Product(String product_name, double product_unit_price, int product_quantity) {
         this.product_name = product_name;
         this.product_unit_price = product_unit_price;
         this.product_quantity = product_quantity;
+        this.product_created_date = new Date(System.currentTimeMillis());
     }
 
     public int getId() {

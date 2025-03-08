@@ -18,8 +18,8 @@ public void addProduct(Product product){
     productService.addProduct(product);
 }
 
-public boolean updateProduct(int id, Product product, String field){
-    return productService.updateProduct( id, product, field);
+public void updateProduct(int id, Product product, String field){
+      productService.updateProduct( id, product, field);
 }
 
 public boolean deleteProduct(int id){

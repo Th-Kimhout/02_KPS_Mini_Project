@@ -5,7 +5,8 @@ import org.app.view.InsertProducts;
 
 public class Main {
     public static void main(String[] args) {
-        InsertProducts.addProduct();
-    ClientView.Display();
+
+
+        InsertProducts.addProduct(20);
     }
 }

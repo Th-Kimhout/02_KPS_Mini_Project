@@ -19,12 +19,14 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public void addProduct(Product product) {
-        productTransaction.put("ui" , product);
+
+            productTransaction.put("ui" , product);
     }
 
     @Override
-    public boolean updateProduct(int id, Product product, String field) {
-        return false;
+    public void updateProduct(int id, Product product, String field) {
+
+        productTransaction.put("uu" , product);;
     }
 
     @Override
