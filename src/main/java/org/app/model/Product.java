@@ -17,6 +17,8 @@ public class Product {
         this.product_created_date = product_created_date;
     }
 
+    public Product() {}
+
 
     public Product(String product_name, double product_unit_price, int product_quantity) {
         this.product_name = product_name;

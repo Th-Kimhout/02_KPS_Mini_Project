@@ -11,7 +11,7 @@ public class ProductRepoImp implements ProductRepo {
     @Override
     public ArrayList<Product> getAllProducts() {
         ArrayList<Product> productList = new ArrayList<>();
-        String selectSql = "select * from products";
+        String selectSql = "SELECT * FROM products";
 
         try (Connection conn = DBConfig.getConnection();
              Statement stmt = conn.createStatement();
@@ -41,7 +41,6 @@ public class ProductRepoImp implements ProductRepo {
             stmt.setString(1, product.getProduct_name());
             stmt.setDouble(2, product.getProduct_unit_price());
             stmt.setInt(3, product.getProduct_quantity());
-            stmt.setDate(4, product.getProduct_created_date());
 
             return stmt.execute();
         } catch (Exception e) {

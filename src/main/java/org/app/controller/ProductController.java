@@ -17,13 +17,13 @@ public class ProductController {
         productService.addProduct(product);
     }
 
-    public void updateProduct(int id, Product product, String field) {
-        productService.updateProduct(id, product);
-    }
+public boolean updateProduct(int id, Product product, String field){
+    return productService.updateProduct( id, product, field);
+}
 
-    public boolean deleteProduct(int id) {
-        return productService.deleteProduct(id);
-    }
+public boolean deleteProduct(int id){
+    return productService.deleteProduct(id);
+}
 
     public Product getProductById(int id) {
         return productService.getProductById(id);
