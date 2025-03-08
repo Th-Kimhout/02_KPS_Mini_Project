@@ -40,6 +40,7 @@ public class ProductRepoImp implements ProductRepo {
             stmt.setString(1, product.getProduct_name());
             stmt.setDouble(2, product.getProduct_unit_price());
             stmt.setInt(3, product.getProduct_quantity());
+            stmt.setDate(4, product.getProduct_created_date());
 
             return stmt.execute();
         } catch (Exception e) {
@@ -50,11 +51,29 @@ public class ProductRepoImp implements ProductRepo {
 
     @Override
     public boolean updateProduct(int id, Product product) {
+
+        String updateSql = "UPDATE products SET product_name = ?, product_unit_price = ?, product_quantity = ?, imported_date = ? WHERE id = ?";
+
+        try (Connection con = DBConfig.getConnection();
+             PreparedStatement stmt = con.prepareStatement(updateSql)) {
+            stmt.setString(1, product.getProduct_name());
+            stmt.setDouble(2, product.getProduct_unit_price());
+            stmt.setInt(3, product.getProduct_quantity());
+            stmt.setDate(4, product.getProduct_created_date());
+            stmt.setInt(5, id);
+            return stmt.execute();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         return false;
     }
 
     @Override
     public boolean updateFieldProduct(int id, String field, String value) {
+
+
+
         return false;
     }
 }
