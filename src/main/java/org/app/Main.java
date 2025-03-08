@@ -1,13 +1,22 @@
 package org.app;
 
+import org.app.controller.ProductController;
 import org.app.utilies.DBConfig;
 import org.app.utilies.Limit_rows;
 import org.app.view.ClientView;
+import org.app.view.InsertProducts;
 
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+
+
+        ProductController pc = new ProductController();
+        InsertProducts.addProduct();
+
+
+
 //        ClientView.displayAllProducts();
 //
 //        ClientView.addNewProduct();

@@ -2,6 +2,7 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.view.InsertProducts;
 
 import java.util.*;
 
@@ -17,6 +18,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public Product addProduct() {
 
+      return InsertProducts.addProduct();
     }
 
     @Override

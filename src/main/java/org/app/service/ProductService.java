@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public interface ProductService {
     ArrayList<Product> getAllProducts();
 
-    Product addProduct(Product product);
+    Product addProduct()    ;
 
     boolean updateProduct(int id, Product product, String field);
 
