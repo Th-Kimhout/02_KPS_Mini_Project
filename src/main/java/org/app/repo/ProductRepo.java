@@ -12,7 +12,7 @@ public interface ProductRepo {
     boolean updateProduct(int id, Product product);
     boolean updateFieldProduct(int id, String field, String value);
 
-    boolean deleteProduct(int id);
+    void deleteProduct(int id);
     Product getProductById(int id);
     ArrayList<Product> getProductByName(String name);
 }

@@ -21,8 +21,8 @@ public boolean updateProduct(int id, Product product, String field){
     return productService.updateProduct( id, product, field);
 }
 
-public boolean deleteProduct(int id){
-    return productService.deleteProduct(id);
+public void deleteProduct(int id){
+    productService.deleteProduct(id);
 }
 
 public Product getProductById(int id){

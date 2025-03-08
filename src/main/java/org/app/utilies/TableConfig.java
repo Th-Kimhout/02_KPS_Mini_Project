@@ -7,10 +7,11 @@ import org.nocrala.tools.texttablefmt.ShownBorders;
 import org.nocrala.tools.texttablefmt.Table;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class TableConfig {
 
-    public static void getTable(ArrayList<Product> product) {
+    public static void getTable(List<Product> product) {
         Table table = new Table(5, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL);
         table.addCell( "ID", new CellStyle(CellStyle.HorizontalAlign.CENTER));
         table.addCell("Product Name", new CellStyle(CellStyle.HorizontalAlign.CENTER));

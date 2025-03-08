@@ -110,18 +110,15 @@ public class ProductRepoImp implements ProductRepo {
     }
 
     @Override
-    public boolean deleteProduct(int id) {
+    public void deleteProduct(int id) {
         String deleteSql = "DELETE FROM products WHERE id = ?";
 
         try (Connection conn = DBConfig.getConnection();
              PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
             stmt.setInt(1, id);
-            int rowsAffected = stmt.executeUpdate();
-
-            return rowsAffected > 0; // Return true if a row was deleted
+            stmt.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return false;
         }
     }
 }

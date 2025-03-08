@@ -19,6 +19,7 @@ public class GetProduct {
             TableConfig.getTable(product);
         }
     }
+
     public static void GetProductByName() {
         System.out.println("Enter Name : ");
         Scanner scanner = new Scanner(System.in);
