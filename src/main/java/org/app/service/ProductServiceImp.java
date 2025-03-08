@@ -2,6 +2,7 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.Color;
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
 
@@ -114,7 +115,7 @@ public class ProductServiceImp implements ProductService {
     public Product getProductById(int id) {
         Product foundProduct = productRepoImp.getProductById(id);
         if (foundProduct == null) {
-            System.out.println("No product found with this ID");
+           throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this ID" + Color.RESET);
         } else {
             TableConfig.getTable(List.of(foundProduct));
         }
@@ -125,7 +126,8 @@ public class ProductServiceImp implements ProductService {
     public void getProductByName(String name) {
         ArrayList<Product> productList = productRepoImp.getProductByName(name);
         if (productList.isEmpty()) {
-            System.out.println("No product found with this name");
+            throw new NullPointerException(Color.BRIGHT_RED + "[!] No product found with this name" + Color.RESET);
+
         } else {
             TableConfig.getTable(productList);
         }
