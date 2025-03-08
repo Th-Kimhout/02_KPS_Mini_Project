@@ -6,6 +6,21 @@ public class ClientView {
 
     static ProductController productController = new ProductController();
 
+  public static void displayAllProducts(){
+        productController.getAllProducts().forEach(
+                (product) -> {
+                    System.out.println(product.getProduct_name());
+                }
+        );
+  }
+  public static void Display(){
+      GetProduct.GetProductByName();
+      GetProduct.GetProductById();
+  }
+
+
+
+
 
 }
 

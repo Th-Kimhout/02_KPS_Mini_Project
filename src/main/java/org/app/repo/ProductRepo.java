@@ -11,5 +11,6 @@ public interface ProductRepo {
 
     boolean updateProduct(int id, Product product);
     boolean updateFieldProduct(int id, String field, String value);
-
+    Product getProductById(int id);
+    ArrayList<Product> getProductByName(String name);
 }
