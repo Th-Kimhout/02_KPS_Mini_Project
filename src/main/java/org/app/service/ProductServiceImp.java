@@ -2,6 +2,7 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.Color;
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
 
@@ -47,8 +48,7 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public boolean updateProduct(int id) {
-        try {
+    public void updateProduct(int id) {
             Product tempProduct = getProductById(id);
             int getMenuValue;
             do {
@@ -56,23 +56,19 @@ public class ProductServiceImp implements ProductService {
                 getMenuValue = Integer.parseInt(TableConfig.displayUpdateMenu());
                 switch (getMenuValue) {
                     case 1 ->
-                            tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z ]+$", "Invalid Input. Allow only Text!"));
+                            tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "Invalid Input"));
                     case 2 ->
-                            tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number!")));
+                            tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number Or Only 2 De ")));
                     case 3 ->
                             tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
                     case 4 -> {
-                        tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z ]+$", "Invalid Input. Allow only Text!"));
-                        tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number!")));
+                        tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z \\d]+$", "Invalid Input"));
+                        tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number And X.XX")));
                         tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
                     }
                 }
                 productUpdateTransaction.add(tempProduct);
             } while (getMenuValue != 5);
-        } catch (NullPointerException e) {
-            throw new NullPointerException("Product Not Found!");
-        }
-        return true;
     }
 
     @Override

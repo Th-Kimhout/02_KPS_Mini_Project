@@ -101,7 +101,6 @@ public class ClientView {
         try {
             productController.updateProduct(Integer.parseInt(productById));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             updateProducts();
         }
     }
