@@ -4,6 +4,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import org.app.model.Product;
+
+import java.sql.*;
+import java.util.ArrayList;
+
 public class Limit_rows {
 
     public static int getLimitRows() {
@@ -18,24 +23,20 @@ public class Limit_rows {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return limitRows;
     }
 
-    public static int updateLimitRow(int Rows) {
-        String selectSql = "UPDATE  limit_rows SET rows = ?";
-        int limitRows = 0;
+    public static int updateLimitRows(int updatedRows) {
+        String updateSql = "update limit_rows set limits = ?";
+
         try (Connection conn = DBConfig.getConnection();
-             PreparedStatement preparedStatement = conn.prepareStatement(selectSql)){
-
-             preparedStatement.setInt(1 , Rows);
-
-             limitRows = preparedStatement.executeUpdate();
+             PreparedStatement preparedStatement = conn.prepareStatement(updateSql)) {
+            preparedStatement.setInt(1, updatedRows);
+            preparedStatement.executeUpdate();
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-        return limitRows;
+        return updatedRows;
     }
 }
