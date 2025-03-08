@@ -34,16 +34,12 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product getProductById(int id) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the product id: ");
-        int productId = scanner.nextInt();
-
-        return null;
+        return productRepoImp.getProductById(id);
     }
 
     @Override
     public ArrayList<Product> getProductByName(String name) {
-        return null;
+        return productRepoImp.getProductByName(name);
     }
 
 
