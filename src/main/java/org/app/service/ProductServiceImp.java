@@ -3,8 +3,7 @@ package org.app.service;
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class ProductServiceImp implements ProductService {
     ProductRepoImp productRepoImp = new ProductRepoImp();
@@ -16,8 +15,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public boolean addProduct(Product product) {
-        return false;
+    public Product addProduct() {
+
     }
 
     @Override
