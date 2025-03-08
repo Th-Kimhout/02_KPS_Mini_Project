@@ -51,11 +51,17 @@ public class ProductRepoImp implements ProductRepo {
 
     @Override
     public boolean updateProduct(int id, Product product) {
-        return false;
+        ArrayList<Product> products = new ArrayList<>();
+
+
+            return false;
     }
 
     @Override
     public boolean updateFieldProduct(int id, String field, String value) {
+        ArrayList<Product> products = new ArrayList<>();
+
+
         return false;
     }
 
