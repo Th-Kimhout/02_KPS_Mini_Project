@@ -18,8 +18,8 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public boolean addProduct(Product product) {
-        return false;
+    public void addProduct(Product product) {
+        productTransaction.put("ui" , product);
     }
 
     @Override

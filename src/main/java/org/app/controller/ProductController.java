@@ -13,8 +13,9 @@ public ArrayList<Product> getAllProducts(){
 return productService.getAllProducts();
 }
 
-public boolean addProduct(Product product){
-    return productService.addProduct(product);
+public void addProduct(Product product){
+
+    productService.addProduct(product);
 }
 
 public boolean updateProduct(int id, Product product, String field){

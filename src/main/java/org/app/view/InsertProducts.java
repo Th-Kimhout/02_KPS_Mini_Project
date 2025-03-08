@@ -11,8 +11,8 @@ import java.util.Scanner;
 
 public class InsertProducts {
 
-    public static Product addProduct() {
-        Product product = new Product();
+   static  ProductController productController = new ProductController();
+    public static void addProduct() {
         Date date = new Date();
         Scanner sc = new Scanner(System.in);
 
@@ -26,12 +26,9 @@ public class InsertProducts {
         UserInput.Input("Enter quantity" , "^\\d+$" , "Invalid quantity" );
         int quantity = sc.nextInt();
 
-        product.setId(productId);
-        product.setProduct_name(productName);
-        product.setProduct_quantity(quantity);
-        product.setProduct_unit_price(price);
-        product.setProduct_created_date(java.sql.Date.valueOf(LocalDate.now()));
+        Product product = new Product(productId , productName , price , quantity , java.sql.Date.valueOf(LocalDate.now()) );
 
-        return product;
+       productController.addProduct(product);
+
     }
 }
