@@ -65,15 +65,7 @@ public class ProductRepoImp implements ProductRepo {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
         return false;
     }
 
-    @Override
-    public boolean updateFieldProduct(int id, String field, String value) {
-
-
-
-        return false;
-    }
 }

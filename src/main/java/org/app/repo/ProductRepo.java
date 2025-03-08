@@ -10,6 +10,4 @@ public interface ProductRepo {
     boolean addProduct(Product product);
 
     boolean updateProduct(int id, Product product);
-    boolean updateFieldProduct(int id, String field, String value);
-
 }
