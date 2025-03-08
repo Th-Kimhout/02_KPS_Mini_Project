@@ -1,10 +1,7 @@
 package org.app.view;
 
 import org.app.controller.ProductController;
-import org.app.utilies.Backup;
-import org.app.utilies.Limit_rows;
-import org.app.utilies.TableConfig;
-import org.app.utilies.UserInput;
+import org.app.utilies.*;
 
 
 public class ClientView {
@@ -87,11 +84,11 @@ public class ClientView {
 
     public static void deleteProduct() {
         String productID;
-        productID = UserInput.Input("Enter Product ID to delete: ", "^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!");
+        productID = UserInput.Input("Please Input Product ID to delete record: ", "^[0-9]+$", "Product ID must be number.");
         try {
             productController.deleteProduct(Integer.parseInt(productID));
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println(Color.BRIGHT_RED + e.getMessage() + Color.RESET);
             deleteProduct();
         }
     }
