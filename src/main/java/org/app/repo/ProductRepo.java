@@ -10,7 +10,8 @@ public interface ProductRepo {
     boolean addProduct(Product product);
 
     boolean updateProduct(int id, Product product);
-    boolean updateFieldProduct(int id, String field, String value);
+
+    void deleteProduct(int id);
     Product getProductById(int id);
     ArrayList<Product> getProductByName(String name);
 }

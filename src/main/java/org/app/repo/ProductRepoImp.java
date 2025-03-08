@@ -41,7 +41,7 @@ public class ProductRepoImp implements ProductRepo {
             stmt.setString(1, product.getProduct_name());
             stmt.setDouble(2, product.getProduct_unit_price());
             stmt.setInt(3, product.getProduct_quantity());
-
+            stmt.setDate(4, product.getProduct_created_date());
             return stmt.execute();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -110,5 +110,18 @@ public class ProductRepoImp implements ProductRepo {
             System.out.println(e.getMessage());
         }
         return productList;
+    }
+
+    @Override
+    public void deleteProduct(int id) {
+        String deleteSql = "DELETE FROM products WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

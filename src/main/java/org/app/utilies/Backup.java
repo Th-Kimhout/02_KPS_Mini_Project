@@ -20,7 +20,7 @@ public class Backup {
     private static final String BACKUP_DIR = "D:\\HRD\\Java Programming\\Java Mini Project\\02_KPS_Mini_Project\\src\\main\\java\\org\\app\\backupfile\\";
     private static final Scanner scanner = new Scanner(System.in);
 
-    public void doBackup() {
+    public static void doBackup() {
         CredentialLoader.loadProperties();
         String username = CredentialLoader.properties.getProperty("db_username");
         String password = CredentialLoader.properties.getProperty("db_password");
@@ -82,16 +82,11 @@ public class Backup {
 
     }
 
-    public void doRestore() {
+    public static void doRestore() {
         CredentialLoader.loadProperties();
         String username = CredentialLoader.properties.getProperty("db_username");
         String password = CredentialLoader.properties.getProperty("db_password");
         try {
-            // Create backup directory if it doesn't exist
-
-
-            // Find the latest version number
-
 
             Table displayBackupFile = new Table(2, BorderStyle.CLASSIC_COMPATIBLE, ShownBorders.ALL);
             displayBackupFile.addCell("ID", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
@@ -106,7 +101,6 @@ public class Backup {
             System.out.println(displayBackupFile.render());
             System.out.print("Select backup file path: ");
             String choice = scanner.nextLine();
-
 
             String backupFilePath = BACKUP_DIR + backupFiles[Integer.parseInt(choice)-1].getName();
             System.out.println(backupFilePath);
@@ -137,7 +131,7 @@ public class Backup {
         }
     }
 
-    public File[] getBackupFilePath() {
+    private static File[] getBackupFilePath() {
         Path backupDir = Paths.get(BACKUP_DIR);
         return backupDir.toFile().listFiles((dir, name) ->
                 name.matches("backup_version\\d+\\.sql") // Match "versionX.sql"
@@ -145,6 +139,3 @@ public class Backup {
 
     }
 }
-
-
-//psql -U postgres -d recoverdb -f "C:\Users\Sanket\Desktop\northwind_backup.sql"

@@ -1,13 +1,11 @@
 package org.app.view;
 
 import org.app.controller.ProductController;
+import org.app.utilies.Backup;
 import org.app.utilies.Limit_rows;
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
-import org.app.utilies.TableConfig;
-import org.app.utilies.UserInput;
 
-import java.util.Scanner;
 
 public class ClientView {
 
@@ -34,30 +32,39 @@ public class ClientView {
                         firstRow -= showRows;
                     }
                 }
-                case "F" -> {
-                    firstRow = 0;
-                }
-                case "L" -> {
-                    firstRow = productController.getAllProducts().size() - (productController.getAllProducts().size() % showRows == 0 ? showRows : productController.getAllProducts().size() % showRows);
-                }
+                case "F" -> firstRow = 0;
+                case "L" ->
+                        firstRow = productController.getAllProducts().size() - (productController.getAllProducts().size() % showRows == 0 ? showRows : productController.getAllProducts().size() % showRows);
                 case "G" -> {
                     String pageNumber = UserInput.Input("Page Number : ", "^[1-" + (int) (Math.ceil((float) productController.getAllProducts().size() / showRows)) + "]$", "Invalid choice");
                     firstRow = (Integer.parseInt(pageNumber) - 1) * showRows;
                 }
-                case "W" ->{}
-                case "R" ->{}
-                case "U" ->{}
-                case "D" ->{}
-                case "S" ->{}
+                case "W" -> productController.addProduct();
+                case "R" -> {
+                    String input = UserInput.Input("Enter ID : ", "^\\d+$", "Invalid ID");
+                    int id = Integer.parseInt(input);
+                    productController.getProductById(id);
+                }
+                case "U" -> updateProducts();
+                case "D" -> deleteProduct();
+                case "S" -> {
+                    String name = UserInput.Input("Enter name : ", "^[a-zA-Z]+$", "Invalid name");
+                    productController.getProductByName(name);
+                }
+
                 case "SE" -> {
                     String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
-                    showRows = Limit_rows.updateLimitRows(Integer.valueOf(limitRows));
+                    showRows = Limit_rows.updateLimitRows(Integer.parseInt(limitRows));
                 }
-                case "SA" ->{}
-                case "UN" ->{}
-                case "BA" ->{}
-                case "RA" ->{}
-                case "E" ->{
+                case "SA" -> productController.saveUpdateTransaction();
+
+                case "UN" -> {productController.displayUnsavedProducts();
+                }
+                case "BA" -> Backup.doBackup();
+
+                case "RE" -> Backup.doRestore();
+
+                case "E" -> {
                     System.out.println("Thank you for using this app");
                     System.exit(0);
                 }
@@ -75,14 +82,23 @@ public class ClientView {
     }
 
     public static void displayAllProducts(int firstRow, int showRows) {
-
-
         TableConfig.printTable(productController.getAllProducts(), firstRow, showRows);
     }
-}
+
+    public static void deleteProduct() {
+        String productID;
+        productID = UserInput.Input("Enter Product ID to delete: ", "^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!");
+        try {
+            productController.deleteProduct(Integer.parseInt(productID));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            deleteProduct();
+        }
+    }
+
     public static void updateProducts() {
-        String productById = UserInput.Input("Input Id to Update : ","^[\\d]+$","Allow Input only Number");
-        try{
+        String productById = UserInput.Input("Input Id to Update : ", "^[\\d]+$", "Allow Input only Number");
+        try {
             productController.updateProduct(Integer.parseInt(productById));
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -90,4 +106,5 @@ public class ClientView {
         }
     }
 
+}
 

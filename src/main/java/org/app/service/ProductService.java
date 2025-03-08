@@ -7,16 +7,15 @@ import java.util.ArrayList;
 public interface ProductService {
     ArrayList<Product> getAllProducts();
 
-    void addProduct(Product product)    ;
+    void addProduct()    ;
 
     boolean updateProduct(int id);
 
-    boolean deleteProduct(int id);
+    void deleteProduct(int id);
 
     Product getProductById(int id);
 
-    ArrayList<Product> getProductByName(String name);
-
+    void getProductByName(String name);
 
     boolean saveInsertTransaction();
 
