@@ -27,7 +27,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public boolean deleteProduct(int id) {
-        return false;
+        return productRepoImp.deleteProduct(id);
     }
 
     @Override

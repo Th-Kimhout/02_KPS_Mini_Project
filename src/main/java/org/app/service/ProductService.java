@@ -17,7 +17,6 @@ public interface ProductService {
 
     ArrayList<Product> getProductByName(String name);
 
-
     boolean saveInsertTransaction();
 
     boolean saveUpdateTransaction();

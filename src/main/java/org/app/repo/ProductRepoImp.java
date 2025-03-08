@@ -57,4 +57,20 @@ public class ProductRepoImp implements ProductRepo {
     public boolean updateFieldProduct(int id, String field, String value) {
         return false;
     }
+
+    @Override
+    public boolean deleteProduct(int id) {
+        String deleteSql = "DELETE FROM products WHERE id = ?";
+
+        try (Connection conn = DBConfig.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(deleteSql)) {
+            stmt.setInt(1, id); // Set the ID parameter
+            int rowsAffected = stmt.executeUpdate(); // Use executeUpdate()
+
+            return rowsAffected > 0; // Return true if a row was deleted
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+        }
+    }
 }
