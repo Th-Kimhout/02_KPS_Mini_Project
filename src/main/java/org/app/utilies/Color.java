@@ -9,6 +9,5 @@ public class Color {
     public static final String BRIGHT_BLUE = "\u001B[94m"; // Table Content
     public static final String BRIGHT_PURPLE = "\u001B[95m"; // Header Table
     public static final String BRIGHT_CYAN = "\u001B[96m"; // Letter Option
-
-    public static final String RESET = "\u001B[0m";
+    public static final String RESET = "\u001B[0m";  // Reset Color
 }

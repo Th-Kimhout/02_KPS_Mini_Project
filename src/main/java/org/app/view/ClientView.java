@@ -3,11 +3,12 @@ package org.app.view;
 import org.app.controller.ProductController;
 import org.app.utilies.*;
 
+import java.util.Scanner;
+
 
 public class ClientView {
-
+    public static Scanner scanner = new Scanner(System.in);
     static ProductController productController = new ProductController();
-
     public static void mainView() {
 
         System.out.println(Color.BRIGHT_CYAN+ """
@@ -26,7 +27,6 @@ public class ClientView {
         while (true) {
             // display all product
             displayAllProducts(firstRow, showRows);
-
             displayMenuOptions();
 
             String pages = UserInput.Input("Enter your choice: ", "^[a-zA-Z]+$", "Invalid choice");
@@ -49,18 +49,10 @@ public class ClientView {
                     firstRow = (Integer.parseInt(pageNumber) - 1) * showRows;
                 }
                 case "W" -> productController.addProduct();
-                case "R" -> {
-                    String input = UserInput.Input("Enter ID : ", "^\\d+$", "Invalid ID");
-                    int id = Integer.parseInt(input);
-                    productController.getProductById(id);
-                }
+                case "R" -> searchById();
                 case "U" -> updateProducts();
                 case "D" -> deleteProduct();
-                case "S" -> {
-                    String name = UserInput.Input("Enter name : ", "^[a-zA-Z]+$", "Invalid name");
-                    productController.getProductByName(name);
-                }
-
+                case "S" -> searchProduct();
                 case "SE" -> {
                     String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
                     showRows = Limit_rows.updateLimitRows(Integer.parseInt(limitRows));
@@ -99,11 +91,43 @@ public class ClientView {
             System.out.print(Color.BRIGHT_GREEN + menuList[i] + Color.RESET + " " + menuOption[i] + "     ");
         }
         System.out.println();
+        System.out.println("W) Write    R) Read (id)    U) Update       D) Delete       S) Search (name)   Se) Set rows");
+        System.out.println("Sa) Save    Un) Unsaved     Ba) Backup      Re) Restore     E) Exit");
         System.out.println("                            __________________________");
     }
 
+    public static void searchProduct() {
+        System.out.print(Color.BRIGHT_YELLOW + "Enter Product Name to search : " + Color.RESET);
+        String name = scanner.nextLine().trim();
+        if(name.isEmpty()){
+            System.out.println(Color.BRIGHT_RED + "[!] Product Name cannot be empty" + Color.RESET);
+            searchProduct();
+        }
+        try{
+            productController.getProductByName(name);
+            System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
+            scanner.nextLine();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            searchProduct();
+        }
+    }
     public static void displayAllProducts(int firstRow, int showRows) {
         TableConfig.printTable(productController.getAllProducts(), firstRow, showRows);
+    }
+
+    public static void searchById() {
+        String idStr = UserInput.Input("Enter Product ID to search: ", "^[0-9]+$", "[!] Product ID must be Number");
+        int id = Integer.parseInt(idStr);
+        try{
+            productController.getProductById(id);
+            System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
+            scanner.nextLine();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            searchById();
+        }
     }
 
     public static void deleteProduct() {
