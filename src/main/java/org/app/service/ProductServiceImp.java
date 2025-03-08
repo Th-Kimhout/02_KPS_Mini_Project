@@ -2,9 +2,13 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.TableConfig;
+import org.app.utilies.UserInput;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 
 public class ProductServiceImp implements ProductService {
     ProductRepoImp productRepoImp = new ProductRepoImp();
@@ -21,8 +25,28 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public boolean updateProduct(int id, Product product, String field) {
-        return false;
+    public boolean updateProduct(int id) {
+        Product tempProduct = getProductById(id);
+        int getMenuValue;
+        do {
+            TableConfig.getTable(List.of(tempProduct));
+            getMenuValue = Integer.parseInt(TableConfig.displayUpdateMenu());
+            switch (getMenuValue) {
+                case 1 ->
+                        tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z ]+$", "Invalid Input. Allow only Text!"));
+                case 2 ->
+                        tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number!")));
+                case 3 ->
+                        tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
+                case 4 -> {
+                    tempProduct.setProduct_name(UserInput.Input("Enter Name : ", "^[a-zA-Z ]+$", "Invalid Input. Allow only Text!"));
+                    tempProduct.setProduct_unit_price(Double.parseDouble(UserInput.Input("Enter Price : ", "^\\d+(\\.\\d{1,2})?$", "Invalid Input. Allow only Number!")));
+                    tempProduct.setProduct_quantity(Integer.parseInt(UserInput.Input("Enter Qty : ", "^\\d+$", "Invalid Input. Allow only Number!")));
+                }
+            }
+            productTransaction.put("uu",tempProduct);
+        } while (getMenuValue != 5);
+        return true;
     }
 
     @Override
@@ -32,12 +56,12 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public Product getProductById(int id) {
-        return null;
+        return productRepoImp.getProductById(id);
     }
 
     @Override
     public ArrayList<Product> getProductByName(String name) {
-        return null;
+        return productRepoImp.getProductByName(name);
     }
 
 
