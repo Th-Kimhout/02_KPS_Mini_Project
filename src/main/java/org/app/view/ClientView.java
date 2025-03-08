@@ -40,9 +40,22 @@ public class ClientView {
                     String pageNumber = UserInput.Input("Page Number : ", "^[1-" + (int) (Math.ceil((float) productController.getAllProducts().size() / showRows)) + "]$", "Invalid choice");
                     firstRow = (Integer.parseInt(pageNumber) - 1) * showRows;
                 }
+                case "W" ->{}
+                case "R" ->{}
+                case "U" ->{}
+                case "D" ->{}
+                case "S" ->{}
                 case "SE" -> {
                     String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
                     showRows = Limit_rows.updateLimitRows(Integer.valueOf(limitRows));
+                }
+                case "SA" ->{}
+                case "UN" ->{}
+                case "BA" ->{}
+                case "RA" ->{}
+                case "E" ->{
+                    System.out.println("Thank you for using this app");
+                    System.exit(0);
                 }
             }
         }
