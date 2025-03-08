@@ -1,10 +1,7 @@
 package org.app.view;
 
 import org.app.controller.ProductController;
-import org.app.utilies.Backup;
-import org.app.utilies.Limit_rows;
-import org.app.utilies.TableConfig;
-import org.app.utilies.UserInput;
+import org.app.utilies.*;
 
 
 public class ClientView {
@@ -12,6 +9,18 @@ public class ClientView {
     static ProductController productController = new ProductController();
 
     public static void mainView() {
+
+        System.out.println(Color.BRIGHT_CYAN+ """
+                
+                  ____  _             _      __   __                                                   _     ____            _                \s
+                 / ___|| |_ ___   ___| | __ |  \\/  | __ _ _ __   __ _  __ _  ___ _ __ ___   ___ _ __ | |_  / ___| _   _ ___| |_ ___ _ __ ___ \s
+                 \\___ \\| __/ _ \\ / __| |/ / | |\\/| |/ _` | '_ \\ / _` |/ _` |/ _ \\ '_ ` _ \\ / _ \\ '_ \\| __| \\___ \\| | | / __| __/ _ \\ '_ ` _ \\\s
+                  ___) | || (_) | (__|   <  | |  | | (_| | | | | (_| | (_| |  __/ | | | | |  __/ | | | |_   ___) | |_| \\__ \\ ||  __/ | | | | |
+                 |____/ \\__\\___/ \\___|_|\\_\\ |_|  |_|\\__,_|_| |_|\\__,_|\\__, |\\___|_| |_| |_|\\___|_| |_|\\__| |____/ \\__, |___/\\__\\___|_| |_| |_|
+                                                                      |___/                                       |___/                      \s
+                
+                """+Color.RESET);
+
         int firstRow = 0;
         int showRows = Limit_rows.getLimitRows();
         while (true) {
@@ -56,9 +65,10 @@ public class ClientView {
                     String limitRows = UserInput.Input("Limit Rows : ", "^[1-9][0-9]*$", "Invalid choice");
                     showRows = Limit_rows.updateLimitRows(Integer.parseInt(limitRows));
                 }
-                case "SA" -> productController.saveUpdateTransaction();
+                case "SA" -> productController.commitTransaction();
 
-                case "UN" -> {productController.displayUnsavedProducts();
+                case "UN" -> {
+                    productController.displayUnsavedProducts();
                 }
                 case "BA" -> Backup.doBackup();
 
@@ -73,11 +83,22 @@ public class ClientView {
     }
 
     public static void displayMenuOptions() {
+        String[] list = {"N.", "P.", "F.", "G."};
+        String[] options = {"Next Page", "Previous Page", "First Page", "Goto"};
         System.out.println("                            ___________ Menu ___________");
-        System.out.println("    N. Next Page    P. Previous Page        F. First Page       L. Last Page    G. Goto");
+        for (int i = 0; i < 4; i++) {
+            System.out.print("         " + Color.BRIGHT_GREEN + list[i] + Color.RESET + " " + options[i]);
+        }
+        System.out.println("\n");
+        String[] menuList = {"W)", "R)", "U)", "D)", "S)", "Se)", "Sa)", "Un)", "Ba)", "Re)", "E)"};
+        String[] menuOption = {"Write", "Read (id)", "Update", "Delete", "Search (name)", "Set Rows", "Save", "Unsaved", "Backup", "Restore", "Exit"};
+        for (int i = 0; i < 10; i++) {
+            if (i == 6) {
+                System.out.println();
+            }
+            System.out.print(Color.BRIGHT_GREEN + menuList[i] + Color.RESET + " " + menuOption[i] + "     ");
+        }
         System.out.println();
-        System.out.println("W) Write    R) Read (id)    U) Update       D) Delete       S) Search (name)   Se) Set rows");
-        System.out.println("Sa) Save    Un) Unsaved     Ba) Backup      Re) Restore     E) Exit");
         System.out.println("                            __________________________");
     }
 

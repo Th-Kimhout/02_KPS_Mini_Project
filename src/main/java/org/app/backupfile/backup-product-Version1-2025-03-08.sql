@@ -97,7 +97,6 @@ COPY public.limit_rows (limits) FROM stdin;
 COPY public.products (id, product_name, product_unit_price, product_quantity, imported_date) FROM stdin;
 1	Apple iPhone 14	799.99	50	2025-03-06
 2	Samsung Galaxy S23	899.99	30	2025-03-06
-3	Sony WH-1000XM5 Headphones	348	120	2025-03-06
 4	Dell XPS 13 Laptop	999.99	40	2025-03-06
 5	Nike Air Force 1 Sneakers	90	200	2025-03-06
 6	Sony PlayStation 5	499.99	70	2025-03-06
@@ -110,6 +109,7 @@ COPY public.products (id, product_name, product_unit_price, product_quantity, im
 13	Apple	1.2	50	\N
 14	Mango	1.75	60	\N
 15	Pineapple	3	30	\N
+3	Kimheng	1	1	2025-03-06
 \.
 
 

@@ -17,7 +17,7 @@ public interface ProductService {
 
     void getProductByName(String name);
 
-    boolean saveInsertTransaction();
+    void commitTransaction();
 
-    boolean saveUpdateTransaction();
+
 }

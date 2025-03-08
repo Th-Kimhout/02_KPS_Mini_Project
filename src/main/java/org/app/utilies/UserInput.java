@@ -8,13 +8,13 @@ public class UserInput {
     static int count = 0;
 
     public static String Input(String request, String regex, String message) {
-        System.out.print(request);
+        System.out.print(Color.BRIGHT_YELLOW + request + Color.RESET);
         String value = sc.nextLine();
 
         if (count >= 3 && request.equals("Enter Backup Id To Restore : ")) {
             System.out.println("The Backup version that you Input, Doesn't exist");
             count = 0;
-            while (true){
+            while (true) {
                 System.out.println("Do You Want To Continues (y/n)? ");
                 value = sc.nextLine();
 
@@ -40,8 +40,4 @@ public class UserInput {
             return value.trim();
     }
 
-    public static void closeScanner() {
-        sc.close();
-        System.out.println("Close Scanner Successfully!");
-    }
 }

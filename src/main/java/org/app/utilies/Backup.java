@@ -11,7 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import java.util.Arrays;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -29,14 +30,14 @@ public class Backup {
             Path backupDir = Paths.get(BACKUP_DIR);
             Files.createDirectories(backupDir);
 
-            // Find the latest version number
+            // Find the latest Version number
             int nextVersion = 1;
             File[] existingBackups = backupDir.toFile().listFiles((dir, name) ->
-                    name.matches("backup_version\\d+\\.sql") // Match "versionX.sql"
+                    name.matches("backup-product-Version\\d+-\\d{4}-\\d{2}-\\d{2}\\.sql") // Match "versionX.sql"
             );
 
             if (existingBackups != null && existingBackups.length > 0) {
-                Pattern pattern = Pattern.compile("backup_version(\\d+)\\.sql");
+                Pattern pattern = Pattern.compile("backup-product-Version(\\d+)-\\d{4}-\\d{2}-\\d{2}\\.sql");
                 int maxVersion = 0;
                 for (File file : existingBackups) {
                     Matcher matcher = pattern.matcher(file.getName());
@@ -49,8 +50,9 @@ public class Backup {
                 }
                 nextVersion = maxVersion + 1;
             }
-
-            String backupFileName = String.format("backup_version%d.sql", nextVersion);
+            LocalDate currentDate = LocalDate.now();
+            String formattedDate = currentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String backupFileName = String.format("backup-product-Version%d-%s.sql", nextVersion, formattedDate);
             String backupFilePath = BACKUP_DIR + backupFileName;
 
             // Define the backup command
@@ -64,20 +66,20 @@ public class Backup {
                     "-f", backupFilePath
             );
 
-            // Execute the command
             pb.environment().put("PGPASSWORD", password);
             Process process = pb.start();
 
-            // Wait for the process to complete
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                System.out.println("Backup successful!");
+                System.out.println(Color.BRIGHT_GREEN + "Backup successful!" + Color.RESET);
             } else {
-                System.err.println("Backup failed with exit code: " + exitCode);
+                System.err.println(Color.BRIGHT_RED + "Backup failed with exit code: " + exitCode + Color.RESET);
             }
+            System.out.println(Color.BRIGHT_YELLOW + "Press Enter To Continue..." + Color.RESET);
+            scanner.nextLine();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
     }
@@ -86,25 +88,32 @@ public class Backup {
         CredentialLoader.loadProperties();
         String username = CredentialLoader.properties.getProperty("db_username");
         String password = CredentialLoader.properties.getProperty("db_password");
+
+        Table displayBackupFile = new Table(2, BorderStyle.UNICODE_BOX, ShownBorders.ALL);
+        displayBackupFile.addCell("ID", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
+        displayBackupFile.addCell("Backup's File", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
+        displayBackupFile.setColumnWidth(0, 10, 60);
+        displayBackupFile.setColumnWidth(1, 10, 60);
+        File[] backupFiles = getBackupFilePath();
+        for (int i = 0; i < backupFiles.length; i++) {
+            displayBackupFile.addCell("" + (i + 1), new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
+            displayBackupFile.addCell("   " + backupFiles[i].getName() + "   ", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
+
+        }
+        System.out.println(displayBackupFile.render());
+        String choice;
+        while (true) {
+            choice = UserInput.Input("Select Version ID to Restore : ", "\\d+", "Invalid Version ID Input!");
+            int versionId = Integer.parseInt(choice);
+            if (versionId < 0 || versionId > backupFiles.length) {
+                System.out.println(Color.BRIGHT_RED + "Selected Version out of range!" + Color.RESET);
+            } else if (versionId == 0) {
+                return;
+            } else break;
+        }
+        String backupFilePath = BACKUP_DIR + backupFiles[Integer.parseInt(choice) - 1].getName();
         try {
 
-            Table displayBackupFile = new Table(2, BorderStyle.CLASSIC_COMPATIBLE, ShownBorders.ALL);
-            displayBackupFile.addCell("ID", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
-            displayBackupFile.addCell("Backup's File", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
-            displayBackupFile.setColumnWidth(0, 10, 60);
-            displayBackupFile.setColumnWidth(1, 10, 60);
-            File[] backupFiles = getBackupFilePath();
-            for (int i = 0; i < backupFiles.length; i++) {
-                displayBackupFile.addCell("" + (i + 1), new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
-                displayBackupFile.addCell("   " + backupFiles[i].getName() + "   ", new CellStyle(CellStyle.HorizontalAlign.CENTER), 1);
-            }
-            System.out.println(displayBackupFile.render());
-            System.out.print("Select backup file path: ");
-            String choice = scanner.nextLine();
-
-            String backupFilePath = BACKUP_DIR + backupFiles[Integer.parseInt(choice)-1].getName();
-            System.out.println(backupFilePath);
-            // Define the backup command
             ProcessBuilder pb = new ProcessBuilder(
                     "psql",
                     "-U", username,
@@ -114,27 +123,27 @@ public class Backup {
                     "-f", backupFilePath
             );
 
-            // Execute the command
             pb.environment().put("PGPASSWORD", password);
             Process process = pb.start();
 
-            // Wait for the process to complete
             int exitCode = process.waitFor();
 
             if (exitCode == 0) {
-                System.out.println("Restore successful!");
+                System.out.println(Color.BRIGHT_GREEN + "Restore successful!" + Color.RESET);
             } else {
-                System.err.println("Restore failed with exit code: " + exitCode);
+                System.err.println(Color.BRIGHT_RED + "Restore failed with exit code: " + exitCode + Color.RESET);
             }
+            System.out.println(Color.BRIGHT_YELLOW + "Press Enter To Continue..." + Color.RESET);
+            scanner.nextLine();
         } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
     private static File[] getBackupFilePath() {
         Path backupDir = Paths.get(BACKUP_DIR);
         return backupDir.toFile().listFiles((dir, name) ->
-                name.matches("backup_version\\d+\\.sql") // Match "versionX.sql"
+                name.matches("backup-product-Version(\\d+)-\\d{4}-\\d{2}-\\d{2}\\.sql") // Match "versionX.sql"
         );
 
     }

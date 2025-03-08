@@ -2,6 +2,7 @@ package org.app.service;
 
 import org.app.model.Product;
 import org.app.repo.ProductRepoImp;
+import org.app.utilies.Color;
 import org.app.utilies.TableConfig;
 import org.app.utilies.UserInput;
 
@@ -132,21 +133,26 @@ public class ProductServiceImp implements ProductService {
     }
 
     @Override
-    public boolean saveInsertTransaction() {
-        System.out.println(productInsertTransaction);
-        for (Product product : productInsertTransaction) {
-            return productRepoImp.addProduct(product);
+    public void commitTransaction() {
 
-        }
-        return false;
-    }
+        String choice = UserInput.Input("Choice : ", "^(si|su|b)$", "Invalid Input. ui, uu or b only!");
+        switch (choice) {
+            case "si" -> {
+                System.out.println(productInsertTransaction);
+                for (Product product : productInsertTransaction) {
+                    productRepoImp.addProduct(product);
+                }
 
-    @Override
-    public boolean saveUpdateTransaction() {
-        for (Product product : productUpdateTransaction) {
-            return productRepoImp.updateProduct(product.getId(), product);
+            }
+            case "su" -> {
+                for (Product product : productUpdateTransaction) {
+                    productRepoImp.updateProduct(product.getId(), product);
+                }
+            }
+            case "b" -> {
+                return;
+            }
         }
-        return false;
     }
 
     public void displayUnsavedProducts() {
@@ -156,15 +162,14 @@ public class ProductServiceImp implements ProductService {
                 uu) Unsaved Update
                 b)  Exit
                 """);
-        String choice = UserInput.Input("Choice : ", "^(ui|uu|b)$", "Invalid Input. ui, uu or b only!");
+        String choice = UserInput.Input("Choice : ", "^(ui|uu)$", "Invalid Input. ui, uu or b only!");
         switch (choice) {
             case "ui" -> TableConfig.getTable(productInsertTransaction);
+
             case "uu" -> TableConfig.getTable(productUpdateTransaction);
-            case "b" -> {
-                return;
-            }
+
         }
-        System.out.println("Press Enter to continue.....");
+        System.out.println(Color.BRIGHT_YELLOW + "Press Enter to continue..." + Color.RESET);
         new Scanner(System.in).nextLine();
 
     }

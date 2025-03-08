@@ -33,13 +33,10 @@ public class ProductController {
          productService.getProductByName(name);
     }
 
-    public boolean saveInsertTransaction() {
-        return productService.saveInsertTransaction();
+    public void commitTransaction() {
+         productService.commitTransaction();
     }
 
-    public boolean saveUpdateTransaction() {
-        return productService.saveUpdateTransaction();
-    }
     public void displayUnsavedProducts() {
         productService.displayUnsavedProducts();
     }

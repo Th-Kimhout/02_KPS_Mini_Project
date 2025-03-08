@@ -21,9 +21,21 @@ ALTER TABLE ONLY public.products DROP CONSTRAINT products_pkey;
 ALTER TABLE public.products ALTER COLUMN id DROP DEFAULT;
 DROP SEQUENCE public.products_id_seq;
 DROP TABLE public.products;
+DROP TABLE public.limit_rows;
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
+
+--
+-- Name: limit_rows; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.limit_rows (
+    limits integer NOT NULL
+);
+
+
+ALTER TABLE public.limit_rows OWNER TO postgres;
 
 --
 -- Name: products; Type: TABLE; Schema: public; Owner: postgres
@@ -70,13 +82,21 @@ ALTER TABLE ONLY public.products ALTER COLUMN id SET DEFAULT nextval('public.pro
 
 
 --
+-- Data for Name: limit_rows; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.limit_rows (limits) FROM stdin;
+3
+\.
+
+
+--
 -- Data for Name: products; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY public.products (id, product_name, product_unit_price, product_quantity, imported_date) FROM stdin;
 1	Apple iPhone 14	799.99	50	2025-03-06
 2	Samsung Galaxy S23	899.99	30	2025-03-06
-3	Sony WH-1000XM5 Headphones	348	120	2025-03-06
 4	Dell XPS 13 Laptop	999.99	40	2025-03-06
 5	Nike Air Force 1 Sneakers	90	200	2025-03-06
 6	Sony PlayStation 5	499.99	70	2025-03-06
@@ -89,6 +109,7 @@ COPY public.products (id, product_name, product_unit_price, product_quantity, im
 13	Apple	1.2	50	\N
 14	Mango	1.75	60	\N
 15	Pineapple	3	30	\N
+3	Kimheng	1	1	2025-03-06
 \.
 
 
