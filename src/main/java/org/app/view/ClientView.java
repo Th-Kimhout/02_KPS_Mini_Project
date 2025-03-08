@@ -16,14 +16,19 @@ public class ClientView {
         );
     }
 
+    public static void Display() {
+        GetProduct.GetProductByName();
+        GetProduct.GetProductById();
+    }
+
     public static void deleteProduct() {
         String productID;
 
         do {
-            productID = UserInput.Input("Enter Product ID to delete: ","^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!");
+            productID = UserInput.Input("Enter Product ID to delete: ", "^[0-9]+$", "Product ID must be integer. Product ID cannot be empty, text and special character!");
             boolean successDeleted = productController.deleteProduct(Integer.parseInt(productID));
 
-            if (successDeleted){
+            if (successDeleted) {
                 System.out.println("Product deleted successfully");
             } else {
                 System.out.println("Product does not exist");
@@ -31,3 +36,6 @@ public class ClientView {
         } while (true);
     }
 }
+
+
+
