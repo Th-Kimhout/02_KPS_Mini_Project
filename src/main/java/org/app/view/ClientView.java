@@ -25,7 +25,12 @@ public class ClientView {
 
     public static void updateProducts() {
         String productById = UserInput.Input("Input Id to Update : ","^[\\d]+$","Allow Input only Number");
-        productController.updateProduct(Integer.parseInt(productById));
+        try{
+            productController.updateProduct(Integer.parseInt(productById));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            updateProducts();
+        }
     }
 
 
